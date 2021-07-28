@@ -1,6 +1,7 @@
 package com.rarible.opensea.client.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import io.daonomic.rpc.domain.Binary
 import io.daonomic.rpc.domain.Word
 import scalether.domain.Address
 import java.math.BigDecimal
@@ -9,17 +10,72 @@ import java.math.BigInteger
 data class OpenSeaOrder(
     val id: BigInteger,
 
-    @JsonProperty("order_hash")
-    val orderHash: Word,
-
-    val asset: Asset,
+    val exchange: Address,
 
     val maker: Maker,
 
     val taker: Taker,
 
+    @JsonProperty("maker_relayer_fee")
+    val makerRelayerFee: BigInteger,
+
+    @JsonProperty("taker_relayer_fee")
+    val takerRelayerFee: BigInteger,
+
+    @JsonProperty("maker_protocol_fee")
+    val makerProtocolFee: BigInteger,
+
+    @JsonProperty("taker_protocol_fee")
+    val takerProtocolFee: BigInteger,
+
+    @JsonProperty("fee_recipient")
+    val feeRecipient: FeeRecipient,
+
+    @JsonProperty("fee_method")
+    val feeMethod: Int,
+
+    val side: OrderSide,
+
+    @JsonProperty("sale_kind")
+    val saleKind: Int,
+
+    val target: Address,
+
+    @JsonProperty("how_to_call")
+    val howToCall: Int,
+
+    @JsonProperty("calldata")
+    val callData: Binary,
+
+    @JsonProperty("replacement_pattern")
+    val replacementPattern: Binary,
+
+    @JsonProperty("static_target")
+    val staticTarget: Address,
+
+    @JsonProperty("static_extradata")
+    val staticExtraData: Binary,
+
+    @JsonProperty("payment_token")
+    val paymentToken: Address,
+
     @JsonProperty("base_price")
-    val basePrice: BigDecimal,
+    val basePrice: BigInteger,
+
+    val extra: BigInteger,
+
+    @JsonProperty("listing_time")
+    val listingTime: Long,
+
+    @JsonProperty("expiration_time")
+    val expirationTime: Long,
+
+    val salt: BigInteger,
+
+    @JsonProperty("order_hash")
+    val orderHash: Word,
+
+    val asset: Asset,
 
     @JsonProperty("current_price")
     val currentPrice: BigDecimal,
@@ -30,18 +86,8 @@ data class OpenSeaOrder(
     @JsonProperty("bounty_multiple")
     val bountyMultiple: BigDecimal,
 
-    @JsonProperty("fee_recipient")
-    val feeRecipient: FeeRecipient,
-
-    val side: OrderSide,
-
-    @JsonProperty("payment_token")
-    val paymentToken: Address,
-
     @JsonProperty("payment_token_contract")
     val paymentTokenContract: PaymentTokenContract,
-
-    val salt: BigInteger,
 
     @JsonProperty("approved_on_chain")
     val approvedOnChain: Boolean,
