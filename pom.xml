@@ -71,6 +71,16 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
+                <groupId>com.rarible</groupId>
+                <artifactId>rarible-opensea-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.rarible</groupId>
+                <artifactId>rarible-opensea-client-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>io.daonomic.scalether</groupId>
                 <artifactId>domain_2.13</artifactId>
                 <version>${scalether.version}</version>
@@ -188,5 +198,6 @@
 
     <modules>
         <module>client</module>
+        <module>starter</module>
     </modules>
 </project>

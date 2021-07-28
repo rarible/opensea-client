@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.rarible.opensea.client.autoconfigure.OpenSeaClientAutoConfiguration
