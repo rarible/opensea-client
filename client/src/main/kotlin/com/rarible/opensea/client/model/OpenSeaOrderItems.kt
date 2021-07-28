@@ -1,7 +1,7 @@
 package com.rarible.opensea.client.model
 
-data class OrderItems(
+data class OpenSeaOrderItems(
     val count: Int,
-    val orders: List<Order>
+    val orders: List<OpenSeaOrder>
 )
 

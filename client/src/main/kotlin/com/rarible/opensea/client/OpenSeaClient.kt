@@ -1,5 +1,7 @@
 package com.rarible.opensea.client
 
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -23,13 +25,17 @@ import java.time.Duration
 import java.util.concurrent.TimeUnit
 
 class OpenSeaClient(endpoint: URI) {
-    private val mapper = ObjectMapper().registerModule(KotlinModule())
+    private val mapper = ObjectMapper().apply {
+        registerModule(KotlinModule())
+        configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        setSerializationInclusion(JsonInclude.Include.NON_NULL)
+    }
+    private val uriBuilderFactory = DefaultUriBuilderFactory(endpoint.toASCIIString()).apply {
+        encodingMode = DefaultUriBuilderFactory.EncodingMode.NONE
+    }
     private val transport = initTransport(endpoint)
 
-    private val uriBuilderFactory = DefaultUriBuilderFactory(endpoint.toASCIIString())
-        .apply { encodingMode = DefaultUriBuilderFactory.EncodingMode.NONE }
-
-    suspend fun getOrders(request: OrdersRequest): OpenSeaResult<OrderItems> {
+    suspend fun getOrders(request: OrdersRequest): OpenSeaResult<OpenSeaOrderItems> {
         val uri = uriBuilderFactory.builder().run {
             path("/wyvern/v1/orders")
             queryParam("bundled", "false")
