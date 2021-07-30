@@ -102,6 +102,8 @@ data class OpenSeaOrder(
     @JsonProperty("prefixed_hash")
     val prefixedHash: Word,
 
+    val quantity: BigInteger,
+
     val v: BigInteger,
 
     val r: Binary,
