@@ -1,6 +1,6 @@
 package com.rarible.opensea.client.model
 
 enum class OrderSide(private val value: Int) {
-    SELL(0),
-    BUY(1)
+    BUY(0),
+    SELL(1)
 }

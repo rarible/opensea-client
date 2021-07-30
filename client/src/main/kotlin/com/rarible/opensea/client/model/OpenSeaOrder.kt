@@ -32,17 +32,17 @@ data class OpenSeaOrder(
     val feeRecipient: FeeRecipient,
 
     @JsonProperty("fee_method")
-    val feeMethod: Int,
+    val feeMethod: FeeMethod,
 
     val side: OrderSide,
 
     @JsonProperty("sale_kind")
-    val saleKind: Int,
+    val saleKind: SaleKind,
 
     val target: Address,
 
     @JsonProperty("how_to_call")
-    val howToCall: Int,
+    val howToCall: HowToCall,
 
     @JsonProperty("calldata")
     val callData: Binary,
@@ -100,5 +100,11 @@ data class OpenSeaOrder(
     val markedInvalid: Boolean,
 
     @JsonProperty("prefixed_hash")
-    val prefixedHash: Word
+    val prefixedHash: Word,
+
+    val v: BigInteger,
+
+    val r: Binary,
+
+    val s: Binary
 )
