@@ -104,7 +104,7 @@ data class OpenSeaOrder(
 
     val quantity: BigInteger,
 
-    val v: BigInteger,
+    val v: Byte,
 
     val r: Binary,
 
