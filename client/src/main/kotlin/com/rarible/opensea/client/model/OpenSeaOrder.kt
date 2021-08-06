@@ -1,11 +1,13 @@
 package com.rarible.opensea.client.model
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.daonomic.rpc.domain.Binary
 import io.daonomic.rpc.domain.Word
 import scalether.domain.Address
 import java.math.BigDecimal
 import java.math.BigInteger
+import java.time.Instant
 
 data class OpenSeaOrder(
     val id: BigInteger,
@@ -75,7 +77,7 @@ data class OpenSeaOrder(
     @JsonProperty("order_hash")
     val orderHash: Word,
 
-    val asset: Asset,
+    val asset: Asset?,
 
     @JsonProperty("current_price")
     val currentPrice: BigDecimal,
@@ -104,9 +106,13 @@ data class OpenSeaOrder(
 
     val quantity: BigInteger,
 
-    val v: Byte,
+    @JsonProperty("created_date")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS", timezone = "UTC")
+    val createdAt: Instant,
 
-    val r: Binary,
+    val v: Byte?,
 
-    val s: Binary
+    val r: Binary?,
+
+    val s: Binary?
 )

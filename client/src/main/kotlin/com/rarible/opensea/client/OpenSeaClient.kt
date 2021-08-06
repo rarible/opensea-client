@@ -3,6 +3,7 @@ package com.rarible.opensea.client
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.rarible.opensea.client.model.*
@@ -27,9 +28,11 @@ import java.util.concurrent.TimeUnit
 class OpenSeaClient(endpoint: URI) {
     private val mapper = ObjectMapper().apply {
         registerModule(KotlinModule())
+        registerModule(JavaTimeModule())
         configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         setSerializationInclusion(JsonInclude.Include.NON_NULL)
     }
+
     private val uriBuilderFactory = DefaultUriBuilderFactory(endpoint.toASCIIString()).apply {
         encodingMode = DefaultUriBuilderFactory.EncodingMode.NONE
     }
@@ -41,11 +44,12 @@ class OpenSeaClient(endpoint: URI) {
             queryParam("bundled", "false")
             queryParam("include_bundled", "false")
             queryParam("include_invalid", "false")
-            queryParam("include_invalid", "false")
             request.limit?.let { queryParam("limit", it) }
             request.offset?.let { queryParam("offset", it) }
             request.listedAfter?.let { queryParam("listed_after", it.epochSecond) }
             request.listedBefore?.let { queryParam("listed_before", it.epochSecond) }
+            request.sortBy?.let { queryParam("order_by", it.value) }
+            request.sortDirection?.let { queryParam("order_direction", it.value) }
             build()
         }
         val response = transport.get()
