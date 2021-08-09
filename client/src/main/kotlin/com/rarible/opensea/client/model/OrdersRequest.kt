@@ -7,6 +7,8 @@ data class OrdersRequest(
     val listedAfter: Instant?,
     // Only show orders listed before this timestamp. Seconds since the Unix epoch.
     val listedBefore: Instant?,
+    // Filter by the side of the order
+    val side: OrderSide?,
     // How to sort the orders. Can be created_date for when they were made, or eth_price to see the lowest-priced orders first (converted to their ETH values). eth_price is only supported when asset_contract_address and token_id are also defined.
     val sortBy: SortBy?,
     // Can be asc or desc for ascending or descending sort. For example, to see the cheapest orders, do order_direction asc and order_by eth_price.
@@ -16,4 +18,3 @@ data class OrdersRequest(
     // Number of orders to offset by (for pagination)
     val offset: Int?
 )
-

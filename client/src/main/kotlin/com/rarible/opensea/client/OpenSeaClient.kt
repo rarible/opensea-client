@@ -50,6 +50,7 @@ class OpenSeaClient(endpoint: URI) {
             request.listedBefore?.let { queryParam("listed_before", it.epochSecond) }
             request.sortBy?.let { queryParam("order_by", it.value) }
             request.sortDirection?.let { queryParam("order_direction", it.value) }
+            request.side?.let { queryParam("side", it.value) }
             build()
         }
         val response = transport.get()
