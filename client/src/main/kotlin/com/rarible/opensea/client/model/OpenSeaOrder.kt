@@ -107,7 +107,7 @@ data class OpenSeaOrder(
     val quantity: BigInteger,
 
     @JsonProperty("created_date")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS", timezone = "UTC")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.[SSSSSS]", timezone = "UTC")
     val createdAt: Instant,
 
     val v: Byte?,
