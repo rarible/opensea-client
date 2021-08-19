@@ -1,21 +1,19 @@
 package com.rarible.opensea.client
 
 import com.rarible.opensea.client.model.*
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import java.net.URI
-import java.time.Duration
 import java.time.Instant
 
 @Disabled
 internal class OpenSeaClientTest {
-    private val client = OpenSeaClient(URI.create("https://api.opensea.io"))
+    private val client = OpenSeaClient(URI.create("https://api.opensea.io"), null)
 
     @Test
-    fun `should get all orders in 10 pages`() = runBlocking<Unit> {
+    fun `should get all orders in 10 pages`() = runBlocking {
         val orders = mutableListOf<OpenSeaOrder>()
         val listedBefore = Instant.now()
 

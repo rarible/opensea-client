@@ -13,7 +13,7 @@ class OpenSeaClientAutoConfiguration(
     @Bean
     @ConditionalOnMissingBean(OpenSeaClient::class)
     fun openSeaClient(): OpenSeaClient {
-        return OpenSeaClient(properties.endpoint ?: OPEN_SEA_ENDPOINT)
+        return OpenSeaClient(properties.endpoint ?: OPEN_SEA_ENDPOINT, properties.proxy)
     }
 
     private companion object {

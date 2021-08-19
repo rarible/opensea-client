@@ -20,12 +20,13 @@ import org.springframework.web.reactive.function.client.*
 import org.springframework.web.util.DefaultUriBuilderFactory
 import reactor.netty.http.client.HttpClient
 import reactor.netty.resources.ConnectionProvider
+import reactor.netty.tcp.ProxyProvider
 import java.net.URI
 import java.nio.charset.StandardCharsets
 import java.time.Duration
 import java.util.concurrent.TimeUnit
 
-class OpenSeaClient(endpoint: URI) {
+class OpenSeaClient(endpoint: URI, proxy: URI?) {
     private val mapper = ObjectMapper().apply {
         registerModule(KotlinModule())
         registerModule(JavaTimeModule())
@@ -36,7 +37,7 @@ class OpenSeaClient(endpoint: URI) {
     private val uriBuilderFactory = DefaultUriBuilderFactory(endpoint.toASCIIString()).apply {
         encodingMode = DefaultUriBuilderFactory.EncodingMode.NONE
     }
-    private val transport = initTransport(endpoint)
+    private val transport = initTransport(endpoint, proxy)
 
     suspend fun getOrders(request: OrdersRequest): OpenSeaResult<OpenSeaOrderItems> {
         val uri = uriBuilderFactory.builder().run {
@@ -60,7 +61,39 @@ class OpenSeaClient(endpoint: URI) {
         return getResult(response)
     }
 
-    private fun clientConnector(): ClientHttpConnector {
+    private suspend  inline fun <reified T> getResult(response: ClientResponse): OpenSeaResult<T> {
+        val httpCode = response.statusCode().value()
+        val body = response.bodyToMono<ByteArray>().awaitFirstOrNull() ?: EMPTY_BODY
+
+        return when (response.statusCode()) {
+            HttpStatus.OK -> OpenSeaResult.success(mapper.readValue(body))
+            HttpStatus.NOT_FOUND -> OpenSeaResult.fail(getError(body, httpCode, OpenSeaErrorCode.ORDERS_NOT_FOUND))
+            HttpStatus.BAD_REQUEST -> OpenSeaResult.fail(getError(body, httpCode, OpenSeaErrorCode.BAD_REQUEST))
+            HttpStatus.TOO_MANY_REQUESTS -> OpenSeaResult.fail(getError(body, httpCode, OpenSeaErrorCode.TOO_MANY_REQUESTS))
+            HttpStatus.INTERNAL_SERVER_ERROR -> OpenSeaResult.fail(getError(body, httpCode, OpenSeaErrorCode.SERVER_ERROR))
+            else -> OpenSeaResult.fail(getError(body, httpCode, OpenSeaErrorCode.UNKNOWN))
+        }
+    }
+
+    private fun getError(body: ByteArray, httpCode: Int, errorCode: OpenSeaErrorCode): OpenSeaError {
+        return OpenSeaError(httpCode, errorCode, if (body.isNotEmpty()) body.toString(StandardCharsets.UTF_8) else "")
+    }
+
+    private fun initTransport(endpoint: URI, proxy: URI?): WebClient {
+
+        return WebClient.builder().run {
+            clientConnector(clientConnector(proxy))
+            exchangeStrategies(
+                ExchangeStrategies.builder()
+                    .codecs { it.defaultCodecs().maxInMemorySize(DEFAULT_MAX_BODY_SIZE) }
+                    .build()
+            )
+            baseUrl(endpoint.toASCIIString())
+            build()
+        }
+    }
+
+    private fun clientConnector(proxy: URI?): ClientHttpConnector {
         val provider = ConnectionProvider.builder("open-sea-connection-provider")
             .maxConnections(50)
             .pendingAcquireMaxCount(-1)
@@ -84,38 +117,17 @@ class OpenSeaClient(endpoint: URI) {
             }
             .responseTimeout(DEFAULT_TIMEOUT)
 
-        return ReactorClientHttpConnector(client)
-    }
-
-    private suspend  inline fun <reified T> getResult(response: ClientResponse): OpenSeaResult<T> {
-        val httpCode = response.statusCode().value()
-        val body = response.bodyToMono<ByteArray>().awaitFirstOrNull() ?: EMPTY_BODY
-
-        return when (response.statusCode()) {
-            HttpStatus.OK -> OpenSeaResult.success(mapper.readValue(body))
-            HttpStatus.NOT_FOUND -> OpenSeaResult.fail(getError(body, httpCode, OpenSeaErrorCode.ORDERS_NOT_FOUND))
-            HttpStatus.BAD_REQUEST -> OpenSeaResult.fail(getError(body, httpCode, OpenSeaErrorCode.BAD_REQUEST))
-            HttpStatus.TOO_MANY_REQUESTS -> OpenSeaResult.fail(getError(body, httpCode, OpenSeaErrorCode.TOO_MANY_REQUESTS))
-            HttpStatus.INTERNAL_SERVER_ERROR -> OpenSeaResult.fail(getError(body, httpCode, OpenSeaErrorCode.SERVER_ERROR))
-            else -> OpenSeaResult.fail(getError(body, httpCode, OpenSeaErrorCode.UNKNOWN))
+        val finalClient = if (proxy != null) {
+            client.tcpConfiguration {
+                it.proxy { spec ->
+                    val userInfo = proxy.userInfo.split(":")
+                    spec.type(ProxyProvider.Proxy.HTTP).host(proxy.host).username(userInfo[0]).password { userInfo[1] }.port(proxy.port)
+                }
+            }
+        } else {
+            client
         }
-    }
-
-    private fun getError(body: ByteArray, httpCode: Int, errorCode: OpenSeaErrorCode): OpenSeaError {
-        return OpenSeaError(httpCode, errorCode, if (body.isNotEmpty()) body.toString(StandardCharsets.UTF_8) else "")
-    }
-
-    private fun initTransport(endpoint: URI?): WebClient {
-        return WebClient.builder().run {
-            clientConnector(clientConnector())
-            exchangeStrategies(
-                ExchangeStrategies.builder()
-                    .codecs { it.defaultCodecs().maxInMemorySize(DEFAULT_MAX_BODY_SIZE) }
-                    .build()
-            )
-            endpoint?.let { baseUrl(it.toASCIIString()) }
-            build()
-        }
+        return ReactorClientHttpConnector(finalClient)
     }
 
     private companion object {
