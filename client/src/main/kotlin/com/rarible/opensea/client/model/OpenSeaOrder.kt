@@ -2,6 +2,8 @@ package com.rarible.opensea.client.model
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.rarible.opensea.client.deserializer.OpenSeaWordDeserializer
 import io.daonomic.rpc.domain.Binary
 import io.daonomic.rpc.domain.Word
 import scalether.domain.Address
@@ -112,7 +114,9 @@ data class OpenSeaOrder(
 
     val v: Byte?,
 
-    val r: Binary?,
+    @JsonDeserialize(using = OpenSeaWordDeserializer::class)
+    val r: Word?,
 
-    val s: Binary?
+    @JsonDeserialize(using = OpenSeaWordDeserializer::class)
+    val s: Word?
 )
