@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.deser.std.StdScalarDeserializer
 import io.daonomic.rpc.domain.Word
 
 class OpenSeaWordDeserializer : StdScalarDeserializer<Word>(Word::class.java) {
-    override fun deserialize(source: JsonParser, ctxt: DeserializationContext): Word {
+    override fun deserialize(source: JsonParser, ctxt: DeserializationContext): Word? {
         val token = source.currentToken
         return if (token == JsonToken.VALUE_STRING) {
             val string = source.text.removePrefix("0x")
@@ -17,7 +17,7 @@ class OpenSeaWordDeserializer : StdScalarDeserializer<Word>(Word::class.java) {
                 63 -> string + "0"
                 else -> string
             }
-            Word.apply(fixedString)
+            if (fixedString.isNotBlank()) Word.apply(fixedString) else null
         } else {
             ctxt.handleUnexpectedToken(_valueClass, source) as Word
         }
