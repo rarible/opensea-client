@@ -14,7 +14,7 @@ pipeline {
 			}
 			steps {
 				sh 'mvn clean'
-                deployToMaven('nexus-ci')
+                deployToMaven('nexus-ext-ci')
 			}
 		}
 	}
