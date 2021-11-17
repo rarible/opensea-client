@@ -6,12 +6,14 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.rarible.opensea.client.agent.UserAgentGenerator
 import com.rarible.opensea.client.model.*
 import io.netty.channel.ChannelOption
 import io.netty.channel.epoll.EpollChannelOption
 import io.netty.handler.timeout.ReadTimeoutHandler
 import io.netty.handler.timeout.WriteTimeoutHandler
 import kotlinx.coroutines.reactive.awaitFirstOrNull
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.client.reactive.ClientHttpConnector
 import org.springframework.http.client.reactive.ReactorClientHttpConnector
@@ -26,7 +28,11 @@ import java.nio.charset.StandardCharsets
 import java.time.Duration
 import java.util.concurrent.TimeUnit
 
-class OpenSeaClient(endpoint: URI, proxy: URI?) {
+class OpenSeaClient(
+    endpoint: URI,
+    proxy: URI?,
+    private val userAgentGenerator: UserAgentGenerator?
+) {
     private val mapper = ObjectMapper().apply {
         registerModule(KotlinModule())
         registerModule(JavaTimeModule())
@@ -56,6 +62,13 @@ class OpenSeaClient(endpoint: URI, proxy: URI?) {
         }
         val response = transport.get()
             .uri(uri)
+            .run {
+                if (userAgentGenerator != null) {
+                    header(HttpHeaders.USER_AGENT, userAgentGenerator.generateUserAgent())
+                } else {
+                    this
+                }
+            }
             .awaitExchange()
 
         return getResult(response)

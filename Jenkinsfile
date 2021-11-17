@@ -10,7 +10,7 @@ pipeline {
 	stages {
 		stage('deploy') {
 			when {
-				branch 'master'
+                anyOf { branch 'master'; branch 'release/*' }
 			}
 			steps {
 				sh 'mvn clean'
