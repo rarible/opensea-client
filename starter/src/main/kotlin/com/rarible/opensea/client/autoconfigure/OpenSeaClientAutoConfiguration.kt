@@ -13,7 +13,7 @@ class OpenSeaClientAutoConfiguration(
     private val properties: OpenSeaClientProperties
 ) {
     @Bean
-    @ConditionalOnMissingBean
+    @ConditionalOnMissingBean(UserAgentGenerator::class)
     fun openSeaUserAgentGenerator(): UserAgentGenerator {
         return UserAgentGeneratorImpl()
     }
