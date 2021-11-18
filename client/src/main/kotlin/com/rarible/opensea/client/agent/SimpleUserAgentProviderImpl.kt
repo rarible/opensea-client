@@ -2,8 +2,8 @@ package com.rarible.opensea.client.agent
 
 import io.netty.util.internal.ThreadLocalRandom
 
-class UserAgentGeneratorImpl : UserAgentGenerator {
-    override fun generateUserAgent(): String {
+class SimpleUserAgentProviderImpl : UserAgentProvider {
+    override fun get(): String {
         val template = agentsTemplate.random()
         return template
             .replace(version1, randomVersion())
