@@ -1,6 +1,6 @@
 package com.rarible.opensea.client
 
-import com.rarible.opensea.client.agent.UserAgentGeneratorImpl
+import com.rarible.opensea.client.agent.SimpleUserAgentProviderImpl
 import com.rarible.opensea.client.model.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions
@@ -11,7 +11,12 @@ import java.time.Instant
 
 @Disabled
 internal class OpenSeaClientTest {
-    private val client = OpenSeaClient(URI.create("https://api.opensea.io"), null, UserAgentGeneratorImpl())
+    private val client = OpenSeaClient(
+        endpoint = URI.create("https://api.opensea.io"),
+        apiKey = null,
+        userAgentProvider = SimpleUserAgentProviderImpl(),
+        proxy = null
+    )
 
     @Test
     fun `should get all orders in 10 pages`() = runBlocking {

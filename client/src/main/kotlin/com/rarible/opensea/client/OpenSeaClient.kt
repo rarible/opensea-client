@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.rarible.opensea.client.agent.UserAgentGenerator
+import com.rarible.opensea.client.agent.UserAgentProvider
 import com.rarible.opensea.client.model.*
 import io.netty.channel.ChannelOption
 import io.netty.channel.epoll.EpollChannelOption
@@ -30,8 +30,9 @@ import java.util.concurrent.TimeUnit
 
 class OpenSeaClient(
     endpoint: URI,
-    proxy: URI?,
-    private val userAgentGenerator: UserAgentGenerator?
+    private val apiKey: String?,
+    private val userAgentProvider: UserAgentProvider?,
+    proxy: URI?
 ) {
     private val mapper = ObjectMapper().apply {
         registerModule(KotlinModule())
@@ -63,8 +64,15 @@ class OpenSeaClient(
         val response = transport.get()
             .uri(uri)
             .run {
-                if (userAgentGenerator != null) {
-                    header(HttpHeaders.USER_AGENT, userAgentGenerator.generateUserAgent())
+                if (userAgentProvider != null) {
+                    header(HttpHeaders.USER_AGENT, userAgentProvider.get())
+                } else {
+                    this
+                }
+            }
+            .run {
+                if (apiKey != null && apiKey.isNotBlank()) {
+                    header("X-API-KEY", apiKey)
                 } else {
                     this
                 }

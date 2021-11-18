@@ -10,5 +10,7 @@ internal const val RARIBLE_OPEN_SEA = "rarible.opensea"
 @ConfigurationProperties(RARIBLE_OPEN_SEA)
 data class OpenSeaClientProperties(
     val endpoint: URI? = null,
-    val proxy: URI? = null
+    val proxy: URI? = null,
+    val apiKey: String? = null,
+    val changeUserAgent: Boolean = true
 )
