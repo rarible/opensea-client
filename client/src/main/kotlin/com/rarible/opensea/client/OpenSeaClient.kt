@@ -22,7 +22,7 @@ import org.springframework.web.reactive.function.client.*
 import org.springframework.web.util.DefaultUriBuilderFactory
 import reactor.netty.http.client.HttpClient
 import reactor.netty.resources.ConnectionProvider
-import reactor.netty.tcp.ProxyProvider
+import reactor.netty.transport.ProxyProvider
 import java.net.URI
 import java.nio.charset.StandardCharsets
 import java.time.Duration
@@ -125,26 +125,23 @@ class OpenSeaClient(
 
         val client = HttpClient
             .create(provider)
-            .tcpConfiguration {
-                it.option(ChannelOption.SO_KEEPALIVE, true)
-                    .option(EpollChannelOption.TCP_KEEPIDLE, 300)
-                    .option(EpollChannelOption.TCP_KEEPINTVL, 60)
-                    .option(EpollChannelOption.TCP_KEEPCNT, 8)
-                    .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, DEFAULT_TIMEOUT_MILLIS.toInt())
-                    .doOnConnected { connection ->
-                        connection.addHandlerLast(ReadTimeoutHandler(DEFAULT_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS))
-                        connection.addHandlerLast(WriteTimeoutHandler(DEFAULT_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS))
-                    }
+            .option(ChannelOption.SO_KEEPALIVE, true)
+            .option(EpollChannelOption.TCP_KEEPIDLE, 300)
+            .option(EpollChannelOption.TCP_KEEPINTVL, 60)
+            .option(EpollChannelOption.TCP_KEEPCNT, 8)
+            .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, DEFAULT_TIMEOUT_MILLIS.toInt())
+            .doOnConnected { connection ->
+                connection.addHandlerLast(ReadTimeoutHandler(DEFAULT_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS))
+                connection.addHandlerLast(WriteTimeoutHandler(DEFAULT_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS))
             }
             .responseTimeout(DEFAULT_TIMEOUT)
 
         val finalClient = if (proxy != null) {
-            client.tcpConfiguration {
-                it.proxy { spec ->
+            client
+                .proxy { option ->
                     val userInfo = proxy.userInfo.split(":")
-                    spec.type(ProxyProvider.Proxy.HTTP).host(proxy.host).username(userInfo[0]).password { userInfo[1] }.port(proxy.port)
+                    option.type(ProxyProvider.Proxy.HTTP).host(proxy.host).username(userInfo[0]).password { userInfo[1] }.port(proxy.port)
                 }
-            }
         } else {
             client
         }

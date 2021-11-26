@@ -50,8 +50,8 @@ internal class OpenSeaClientTest {
 
             val orders1 = getOrders(listedAfter1, listedBefore1, 200)
             println("\nstart=${listedAfter1.epochSecond}, end=${listedBefore1.epochSecond}")
-            println("minListingTime=${orders1.map { it.listingTime }.min()}, maxListingTime=${orders1.map { it.listingTime }.max()}")
-            println("minCreate=${orders1.map { it.createdAt.epochSecond }.min()}, maxCreate=${orders1.map { it.createdAt.epochSecond }.max()}")
+            println("minListingTime=${orders1.map { it.listingTime }.minOrNull()}, maxListingTime=${orders1.map { it.listingTime }.maxOrNull()}")
+            println("minCreate=${orders1.map { it.createdAt.epochSecond }.minOrNull()}, maxCreate=${orders1.map { it.createdAt.epochSecond }.maxOrNull()}")
             println("size=${orders1.size}")
         }
 //        run {
