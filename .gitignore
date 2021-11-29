@@ -16,6 +16,7 @@ dist/
 
 # JetBrains IDE
 .idea/
+.okhttpcache/
 *.iml
 
 # Unit test reports
@@ -31,3 +32,5 @@ Thumbs.db
 pom.xml.versionsBackup
 
 .flattened-pom.xml
+
+*/CHANGELOG.md
