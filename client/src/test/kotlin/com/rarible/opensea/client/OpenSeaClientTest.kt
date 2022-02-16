@@ -15,7 +15,8 @@ internal class OpenSeaClientTest {
         endpoint = URI.create("https://api.opensea.io"),
         apiKey = null,
         userAgentProvider = SimpleUserAgentProviderImpl(),
-        proxy = null
+        proxy = null,
+        logRawJson = true
     )
 
     @Test
@@ -23,7 +24,7 @@ internal class OpenSeaClientTest {
         val orders = mutableListOf<OpenSeaOrder>()
         val listedBefore = Instant.now()
 
-        for (i in 1..50) {
+        for (i in 1..2) {
             val request = OrdersRequest(
                 limit = 10,
                 offset = orders.size,

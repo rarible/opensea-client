@@ -25,7 +25,8 @@ class OpenSeaClientAutoConfiguration(
             endpoint = properties.endpoint ?: OPEN_SEA_ENDPOINT,
             apiKey = properties.apiKey,
             userAgentProvider = if (properties.changeUserAgent) userAgentProvider else null,
-            proxy = properties.proxy
+            proxy = properties.proxy,
+            logRawJson = properties.logRawJson
         )
     }
 

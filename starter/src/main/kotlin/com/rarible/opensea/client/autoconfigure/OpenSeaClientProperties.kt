@@ -12,5 +12,6 @@ data class OpenSeaClientProperties(
     val endpoint: URI? = null,
     val proxy: URI? = null,
     val apiKey: String? = null,
-    val changeUserAgent: Boolean = true
+    val changeUserAgent: Boolean = true,
+    val logRawJson: Boolean = false
 )

@@ -13,6 +13,7 @@ import io.netty.channel.epoll.EpollChannelOption
 import io.netty.handler.timeout.ReadTimeoutHandler
 import io.netty.handler.timeout.WriteTimeoutHandler
 import kotlinx.coroutines.reactive.awaitFirstOrNull
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.client.reactive.ClientHttpConnector
@@ -32,7 +33,8 @@ class OpenSeaClient(
     endpoint: URI,
     private val apiKey: String?,
     private val userAgentProvider: UserAgentProvider?,
-    proxy: URI?
+    proxy: URI?,
+    private val logRawJson: Boolean = false
 ) {
     private val mapper = ObjectMapper().apply {
         registerModule(KotlinModule())
@@ -85,9 +87,13 @@ class OpenSeaClient(
     private suspend  inline fun <reified T> getResult(response: ClientResponse): OpenSeaResult<T> {
         val httpCode = response.statusCode().value()
         val body = response.bodyToMono<ByteArray>().awaitFirstOrNull() ?: EMPTY_BODY
-
         return when (response.statusCode()) {
-            HttpStatus.OK -> OpenSeaResult.success(mapper.readValue(body))
+            HttpStatus.OK -> {
+                if (logRawJson) {
+                    logger.info("Raw OpenSea orders: ${String(body)}", )
+                }
+                OpenSeaResult.success(mapper.readValue(body))
+            }
             HttpStatus.NOT_FOUND -> OpenSeaResult.fail(getError(body, httpCode, OpenSeaErrorCode.ORDERS_NOT_FOUND))
             HttpStatus.BAD_REQUEST -> OpenSeaResult.fail(getError(body, httpCode, OpenSeaErrorCode.BAD_REQUEST))
             HttpStatus.TOO_MANY_REQUESTS -> OpenSeaResult.fail(getError(body, httpCode, OpenSeaErrorCode.TOO_MANY_REQUESTS))
@@ -149,6 +155,7 @@ class OpenSeaClient(
     }
 
     private companion object {
+        val logger = LoggerFactory.getLogger(OpenSeaClient::class.java)
         val EMPTY_BODY: ByteArray = ByteArray(0)
         val DEFAULT_MAX_BODY_SIZE = DataSize.ofMegabytes(10).toBytes().toInt()
         val DEFAULT_TIMEOUT: Duration = Duration.ofSeconds(60)
