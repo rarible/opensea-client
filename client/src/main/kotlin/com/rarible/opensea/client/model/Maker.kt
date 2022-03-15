@@ -4,5 +4,14 @@ import scalether.domain.Address
 
 data class Maker(
     val address: Address,
-    val user: User?
+    /**
+     * TODO: need fix serialization
+     * 1)
+     * "user": {
+     *   "username": "NullAddress"
+     *  }
+     * 2)
+     * "user": 150875
+     */
+    //val user: User? //
 )

@@ -96,7 +96,7 @@ internal class OpenSeaClientTest {
             )
             val result = client.getOrders(request).ensureSuccess().orders
             result.forEach {
-                println("----> id=${it.id}, ${it.listingTime} ${it.createdAt}, ${it.side}, ${it.basePrice}, ${it.maker.user?.name} ${it.asset}")
+                println("----> id=${it.id}, ${it.listingTime} ${it.createdAt}, ${it.side}, ${it.basePrice}, ${it.maker} ${it.asset}")
             }
             println("\n\n")
 
