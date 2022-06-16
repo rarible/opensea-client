@@ -31,7 +31,7 @@ internal class OpenSeaClientTest {
                 sortBy = SortBy.CREATED_DATE,
                 sortDirection = SortDirection.DESC,
                 listedBefore = listedBefore,
-                side = null,
+                side = OrderSide.SELL,
                 listedAfter = null
             )
             orders.addAll(client.getOrders(request).ensureSuccess().orders)
