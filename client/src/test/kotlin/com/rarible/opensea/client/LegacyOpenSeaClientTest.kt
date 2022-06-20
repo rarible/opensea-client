@@ -1,6 +1,7 @@
 package com.rarible.opensea.client
 
 import com.rarible.opensea.client.agent.SimpleUserAgentProviderImpl
+import com.rarible.opensea.client.agent.UserAgentProvider
 import com.rarible.opensea.client.model.v1.OpenSeaOrder
 import com.rarible.opensea.client.model.v1.OrderSide
 import com.rarible.opensea.client.model.v1.OrdersRequest
@@ -18,7 +19,11 @@ internal class LegacyOpenSeaClientTest {
     private val client = OpenSeaClientImpl(
         endpoint = URI.create("https://api.opensea.io"),
         apiKey = null,
-        userAgentProvider = SimpleUserAgentProviderImpl(),
+        userAgentProvider = object : UserAgentProvider {
+            override fun get(): String {
+                return ""
+            }
+        },
         proxy = null,
         logRawJson = true
     )

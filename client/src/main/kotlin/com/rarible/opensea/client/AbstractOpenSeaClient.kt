@@ -16,6 +16,8 @@ import io.netty.channel.epoll.EpollChannelOption
 import io.netty.handler.timeout.ReadTimeoutHandler
 import io.netty.handler.timeout.WriteTimeoutHandler
 import kotlinx.coroutines.reactive.awaitFirstOrNull
+import kotlinx.coroutines.reactive.awaitSingle
+import kotlinx.coroutines.reactor.awaitSingle
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -28,6 +30,7 @@ import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.awaitExchange
 import org.springframework.web.reactive.function.client.bodyToMono
 import org.springframework.web.util.DefaultUriBuilderFactory
+import reactor.core.publisher.Mono
 import reactor.netty.http.client.HttpClient
 import reactor.netty.resources.ConnectionProvider
 import reactor.netty.transport.ProxyProvider
@@ -75,7 +78,7 @@ abstract class AbstractOpenSeaClient(
                     this
                 }
             }
-            .awaitExchange { it }
+            .awaitExchange()
 
         return getResult(response)
     }

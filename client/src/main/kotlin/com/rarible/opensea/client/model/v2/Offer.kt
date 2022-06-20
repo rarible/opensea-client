@@ -1,8 +1,15 @@
 package com.rarible.opensea.client.model.v2
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import java.math.BigInteger
 
 data class Offer(
-    @JsonProperty("offer_item")
-    val offerItem: OfferItem
+    val itemType: Long,
+
+    val token: String,
+
+    val identifierOrCriteria: String,
+
+    val startAmount: BigInteger,
+
+    val endAmount: BigInteger
 )

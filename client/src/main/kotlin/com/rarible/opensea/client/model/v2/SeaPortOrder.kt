@@ -13,6 +13,7 @@ data class SeaPortOrder(
     val createdAt: Instant,
 
     @JsonProperty("closing_date")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss[.SSSSSS][z]", timezone = "UTC")
     val closingDate: Instant?,
 
     @JsonProperty("listing_time")
@@ -25,10 +26,10 @@ data class SeaPortOrder(
     val orderHash: Word?,
 
     @JsonProperty("protocol_data")
-    val protocolData: ProtocolData?,
+    val protocolData: ProtocolData,
 
-    @JsonProperty("protocol_data")
-    val protocol_address: String?,
+    @JsonProperty("protocol_address")
+    val protocolAddress: String?,
 
     val maker: Account,
 
@@ -38,10 +39,10 @@ data class SeaPortOrder(
     val currentPrice: BigDecimal,
 
     @JsonProperty("maker_fees")
-    val makerFees: Fees,
+    val makerFees: List<Fee>,
 
     @JsonProperty("taker_fees")
-    val takerFees: Fees,
+    val takerFees: List<Fee>,
 
     val side: OrderSide,
 

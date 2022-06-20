@@ -1,6 +1,7 @@
 package com.rarible.opensea.client
 
 import com.rarible.opensea.client.agent.SimpleUserAgentProviderImpl
+import com.rarible.opensea.client.agent.UserAgentProvider
 import com.rarible.opensea.client.model.v2.OrdersRequest
 import com.rarible.opensea.client.model.v2.SeaPortOrder
 import kotlinx.coroutines.runBlocking
@@ -11,9 +12,13 @@ import java.net.URI
 internal class SeaPortProtocolClientTest {
     private val client = SeaPortProtocolClientImpl(
         endpoint = URI.create("https://api.opensea.io"),
-        network = SeaPortProtocolClient.Network.RINKEBY,
+        network = SeaPortProtocolClient.Network.ETHEREUM,
         apiKey = null,
-        userAgentProvider = SimpleUserAgentProviderImpl(),
+        userAgentProvider = object : UserAgentProvider {
+            override fun get(): String {
+                return ""
+            }
+        },
         proxy = null,
         logRawJson = true
     )
@@ -24,7 +29,7 @@ internal class SeaPortProtocolClientTest {
         var next: String? = null
         for (i in 1..2) {
             val request = OrdersRequest(
-                limit = 50,
+                limit = 1,
                 next = next,
                 previous = null
             )

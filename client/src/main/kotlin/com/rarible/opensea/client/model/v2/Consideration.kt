@@ -1,8 +1,15 @@
 package com.rarible.opensea.client.model.v2
 
-import com.fasterxml.jackson.annotation.JsonProperty
-
 data class Consideration(
-    @JsonProperty("consideration_item")
-    val considerationItem: ConsiderationItem
+    val item_type: Long,
+
+    val token: String,
+
+    val identifierOrCriteria: String,
+
+    val startAmount: Long,
+
+    val endAmount: Long,
+
+    val recipient: String
 )
