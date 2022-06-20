@@ -7,4 +7,10 @@ data class OrdersRequest(
     val next: String?,
     // A cursor to be supplied as a query param to retrieve the previous page
     val previous: String?
-)
+) {
+    init {
+        require((next != null && previous != null).not()) {
+            "'next' and 'previous' params can't be defined simultaneously"
+        }
+    }
+}

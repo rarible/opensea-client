@@ -6,6 +6,7 @@ import com.rarible.opensea.client.model.v1.OpenSeaOrderItems
 import com.rarible.opensea.client.model.v1.OrdersRequest
 import java.net.URI
 
+@Deprecated("Should use SeaPortProtocolClientImpl")
 class OpenSeaClientImpl(
     endpoint: URI,
     apiKey: String?,

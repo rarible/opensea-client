@@ -14,7 +14,7 @@ import java.net.URI
 import java.time.Instant
 
 @Disabled
-internal class OpenSeaClientTest {
+internal class LegacyOpenSeaClientTest {
     private val client = OpenSeaClientImpl(
         endpoint = URI.create("https://api.opensea.io"),
         apiKey = null,

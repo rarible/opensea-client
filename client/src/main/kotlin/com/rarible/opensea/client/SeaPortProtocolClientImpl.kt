@@ -8,6 +8,7 @@ import java.net.URI
 
 class SeaPortProtocolClientImpl(
     endpoint: URI,
+    private val network: SeaPortProtocolClient.Network,
     apiKey: String?,
     userAgentProvider: UserAgentProvider?,
     proxy: URI?,
@@ -15,6 +16,13 @@ class SeaPortProtocolClientImpl(
 ) : SeaPortProtocolClient, AbstractOpenSeaClient(endpoint, apiKey, userAgentProvider, proxy, logRawJson) {
 
     override suspend fun getListOrders(request: OrdersRequest): OpenSeaResult<SeaPortOrders> {
-        TODO("Not yet implemented")
+        val uri = uriBuilderFactory.builder().run {
+            path("/v2/orders/${network.value}/seaport/listings")
+            request.limit?.let { queryParam("limit", it) }
+            request.next?.let { queryParam("next", it) }
+            request.previous?.let { queryParam("previous", it) }
+            build()
+        }
+        return getOpenSeaResult(uri)
     }
 }

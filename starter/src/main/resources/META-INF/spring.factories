@@ -1,2 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.rarible.opensea.client.autoconfigure.OpenSeaClientAutoConfiguration
+com.rarible.opensea.client.autoconfigure.OpenSeaUserAgentProviderAutoConfiguration,\
+com.rarible.opensea.client.autoconfigure.LegacyOpenSeaClientAutoConfiguration,\
+com.rarible.opensea.client.autoconfigure.SeaPortProtocolClientAutoConfiguration
