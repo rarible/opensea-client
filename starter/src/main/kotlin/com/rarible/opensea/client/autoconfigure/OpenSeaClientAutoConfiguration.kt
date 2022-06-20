@@ -1,6 +1,7 @@
 package com.rarible.opensea.client.autoconfigure
 
 import com.rarible.opensea.client.OpenSeaClient
+import com.rarible.opensea.client.OpenSeaClientImpl
 import com.rarible.opensea.client.agent.UserAgentProvider
 import com.rarible.opensea.client.agent.SimpleUserAgentProviderImpl
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
@@ -21,7 +22,7 @@ class OpenSeaClientAutoConfiguration(
     @Bean
     @ConditionalOnMissingBean(OpenSeaClient::class)
     fun openSeaClient(userAgentProvider: UserAgentProvider): OpenSeaClient {
-        return OpenSeaClient(
+        return OpenSeaClientImpl(
             endpoint = properties.endpoint ?: OPEN_SEA_ENDPOINT,
             apiKey = properties.apiKey,
             userAgentProvider = if (properties.changeUserAgent) userAgentProvider else null,
