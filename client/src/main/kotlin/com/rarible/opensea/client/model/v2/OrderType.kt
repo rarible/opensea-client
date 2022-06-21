@@ -1,20 +1,13 @@
 package com.rarible.opensea.client.model.v2
 
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonValue
-
-enum class OrderType(@get:JsonValue val value: String) {
-    BASIC("basic")
+enum class OrderType(val value: Int) {
+    // No partial fills, anyone can execute
+    FULL_OPEN(0),
+    // Partial fills supported, anyone can execute
+    PARTIAL_OPEN(1),
+    // No partial fills, only offerer or zone can execute
+    FULL_RESTRICTED(2),
+    // Partial fills supported, only offerer or zone can execut
+    PARTIAL_RESTRICTED(3)
     ;
-
-    companion object {
-        @JsonCreator
-        @JvmStatic
-        fun fromValue(value: String): OrderType {
-            return when (value) {
-                BASIC.value -> BASIC
-                else -> throw IllegalArgumentException("Unsupported value '$value'")
-            }
-        }
-    }
 }

@@ -1,49 +1,29 @@
 package com.rarible.opensea.client.model.v2
 
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonValue
+import io.daonomic.rpc.domain.Word
+import scalether.domain.Address
 import java.math.BigInteger
 
 data class OrderParameters(
-    val offerer: String,
+    val offerer: Address,
 
-    val zone: String,
-
-    val zoneHash: String,
-
-    val startTime: Long,
-
-    val endTime: Long,
-
-    val orderType: OrderType,
-
-    val salt: BigInteger,
-
-    val conduitKey: String,
-
-    val nonce: Long,
+    val zone: Address,
 
     val offer: List<Offer>,
 
-    val consideration: List<Consideration>
-) {
-    enum class OrderType(@get:JsonValue val value: Int) {
-        BUY(1),
-        SELL(2),
-        BUNDLE(3)
-        ;
+    val consideration: List<Consideration>,
 
-        companion object {
-            @JsonCreator
-            @JvmStatic
-            fun fromValue(value: Int): OrderType {
-                return when (value) {
-                    BUY.value -> BUY
-                    SELL.value -> SELL
-                    BUNDLE.value -> BUNDLE
-                    else -> throw IllegalArgumentException("Unsupported value '$value'")
-                }
-            }
-        }
-    }
-}
+    val orderType: OrderType,
+
+    val startTime: BigInteger,
+
+    val endTime: BigInteger,
+
+    val zoneHash: Word,
+
+    val salt: BigInteger,
+
+    val conduitKey: Word,
+
+    val counter: BigInteger
+)

@@ -47,7 +47,7 @@ data class SeaPortOrder(
     val side: OrderSide,
 
     @JsonProperty("order_type")
-    val orderType: OrderType,
+    val orderType: SeaPortOrderType,
 
     val canceled: Boolean,
 
