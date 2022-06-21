@@ -1,5 +1,7 @@
 package com.rarible.opensea.client.model.v2
 
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonValue
 import java.math.BigInteger
 
 data class OrderParameters(
@@ -25,9 +27,23 @@ data class OrderParameters(
 
     val consideration: List<Consideration>
 ) {
-    enum class OrderType(val value: Int) {
+    enum class OrderType(@get:JsonValue val value: Int) {
         BUY(1),
         SELL(2),
         BUNDLE(3)
+        ;
+
+        companion object {
+            @JsonCreator
+            @JvmStatic
+            fun fromValue(value: Int): OrderType {
+                return when (value) {
+                    BUY.value -> BUY
+                    SELL.value -> SELL
+                    BUNDLE.value -> BUNDLE
+                    else -> throw IllegalArgumentException("Unsupported value '$value'")
+                }
+            }
+        }
     }
 }

@@ -1,6 +1,5 @@
 package com.rarible.opensea.client
 
-import com.rarible.opensea.client.agent.SimpleUserAgentProviderImpl
 import com.rarible.opensea.client.agent.UserAgentProvider
 import com.rarible.opensea.client.model.v2.OrdersRequest
 import com.rarible.opensea.client.model.v2.SeaPortOrder
@@ -27,9 +26,9 @@ internal class SeaPortProtocolClientTest {
     fun `should get all orders in 10 pages`() = runBlocking {
         val orders = mutableListOf<SeaPortOrder>()
         var next: String? = null
-        for (i in 1..2) {
+        for (i in 1..1) {
             val request = OrdersRequest(
-                limit = 1,
+                limit = 50,
                 next = next,
                 previous = null
             )
@@ -37,7 +36,7 @@ internal class SeaPortProtocolClientTest {
             orders.addAll(result.orders)
             next = result.next
         }
-        assertEquals(orders.size, 100)
-        assertEquals(orders.map { it.orderHash }.toSet().size, 100)
+        assertEquals(orders.size, 50)
+        assertEquals(orders.map { it.orderHash }.toSet().size, 50)
     }
 }

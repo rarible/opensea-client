@@ -1,5 +1,7 @@
 package com.rarible.opensea.client.model.v2
 
+import java.math.BigInteger
+
 data class Consideration(
     val item_type: Long,
 
@@ -7,9 +9,9 @@ data class Consideration(
 
     val identifierOrCriteria: String,
 
-    val startAmount: Long,
+    val startAmount: BigInteger,
 
-    val endAmount: Long,
+    val endAmount: BigInteger,
 
     val recipient: String
 )
