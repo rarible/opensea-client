@@ -25,5 +25,7 @@ data class OrderParameters(
 
     val conduitKey: Word,
 
+    val totalOriginalConsiderationItems: BigInteger,
+
     val counter: BigInteger
 )
