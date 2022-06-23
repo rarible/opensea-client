@@ -1,7 +1,7 @@
 package com.rarible.opensea.client.autoconfigure
 
 import com.rarible.opensea.client.OpenSeaClient
-import com.rarible.opensea.client.SeaPortProtocolClient
+import com.rarible.opensea.client.SeaportProtocolClient
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,7 +18,7 @@ class OpenSeaClientAutoConfigurationTest {
     private lateinit var openSeaClient: OpenSeaClient
 
     @Autowired
-    private lateinit var seaPortProtocolClient: SeaPortProtocolClient
+    private lateinit var seaPortProtocolClient: SeaportProtocolClient
 
     @Test
     fun `test default consumer initialized`() {

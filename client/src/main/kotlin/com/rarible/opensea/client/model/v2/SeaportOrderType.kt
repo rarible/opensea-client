@@ -3,7 +3,7 @@ package com.rarible.opensea.client.model.v2
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonValue
 
-enum class SeaPortOrderType(@get:JsonValue val value: String) {
+enum class SeaportOrderType(@get:JsonValue val value: String) {
     BASIC("basic"),
     ENGLISH_AUCTION("english")
     ;
@@ -11,7 +11,7 @@ enum class SeaPortOrderType(@get:JsonValue val value: String) {
     companion object {
         @JsonCreator
         @JvmStatic
-        fun fromValue(value: String): SeaPortOrderType {
+        fun fromValue(value: String): SeaportOrderType {
             return when (value) {
                 BASIC.value -> BASIC
                 ENGLISH_AUCTION.value -> ENGLISH_AUCTION

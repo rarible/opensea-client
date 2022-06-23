@@ -2,16 +2,16 @@ package com.rarible.opensea.client
 
 import com.rarible.opensea.client.agent.UserAgentProvider
 import com.rarible.opensea.client.model.v2.OrdersRequest
-import com.rarible.opensea.client.model.v2.SeaPortOrder
+import com.rarible.opensea.client.model.v2.SeaportOrder
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.net.URI
 
 internal class SeaPortProtocolClientTest {
-    private val client = SeaPortProtocolClientImpl(
+    private val client = SeaportProtocolClientImpl(
         endpoint = URI.create("https://api.opensea.io"),
-        network = SeaPortProtocolClient.Network.ETHEREUM,
+        network = SeaportProtocolClient.Network.ETHEREUM,
         apiKey = null,
         userAgentProvider = object : UserAgentProvider {
             override fun get(): String {
@@ -24,7 +24,7 @@ internal class SeaPortProtocolClientTest {
 
     @Test
     fun `should get all orders in 10 pages`() = runBlocking {
-        val orders = mutableListOf<SeaPortOrder>()
+        val orders = mutableListOf<SeaportOrder>()
         var next: String? = null
         for (i in 1..1) {
             val request = OrdersRequest(

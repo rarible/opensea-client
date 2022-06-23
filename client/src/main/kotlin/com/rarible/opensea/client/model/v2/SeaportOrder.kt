@@ -7,7 +7,7 @@ import io.daonomic.rpc.domain.Word
 import java.math.BigDecimal
 import java.time.Instant
 
-data class SeaPortOrder(
+data class SeaportOrder(
     @JsonProperty("created_date")
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss[.SSSSSS][z]", timezone = "UTC")
     val createdAt: Instant,
@@ -47,7 +47,7 @@ data class SeaPortOrder(
     val side: OrderSide,
 
     @JsonProperty("order_type")
-    val orderType: SeaPortOrderType,
+    val orderType: SeaportOrderType,
 
     val canceled: Boolean,
 
