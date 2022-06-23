@@ -23,7 +23,7 @@ data class SeaportOrder(
     val expirationTime: Long,
 
     @JsonProperty("order_hash")
-    val orderHash: Word?,
+    val orderHash: Word,
 
     @JsonProperty("protocol_data")
     val protocolData: ProtocolData,
