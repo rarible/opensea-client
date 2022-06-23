@@ -6,6 +6,7 @@ import io.daonomic.rpc.domain.Binary
 import io.daonomic.rpc.domain.Word
 import scalether.domain.Address
 import java.math.BigDecimal
+import java.math.BigInteger
 import java.time.Instant
 
 data class SeaportOrder(
@@ -37,7 +38,7 @@ data class SeaportOrder(
     val taker: Account?,
 
     @JsonProperty("current_price")
-    val currentPrice: BigDecimal,
+    val currentPrice: BigInteger,
 
     @JsonProperty("maker_fees")
     val makerFees: List<Fee>,
