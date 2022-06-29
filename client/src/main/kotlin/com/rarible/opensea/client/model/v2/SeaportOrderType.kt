@@ -5,7 +5,8 @@ import com.fasterxml.jackson.annotation.JsonValue
 
 enum class SeaportOrderType(@get:JsonValue val value: String) {
     BASIC("basic"),
-    ENGLISH_AUCTION("english")
+    ENGLISH_AUCTION("english"),
+    DUTCH_AUCTION("dutch")
     ;
 
     companion object {
@@ -15,6 +16,7 @@ enum class SeaportOrderType(@get:JsonValue val value: String) {
             return when (value) {
                 BASIC.value -> BASIC
                 ENGLISH_AUCTION.value -> ENGLISH_AUCTION
+                DUTCH_AUCTION.value -> DUTCH_AUCTION
                 else -> throw IllegalArgumentException("Unsupported value '$value'")
             }
         }

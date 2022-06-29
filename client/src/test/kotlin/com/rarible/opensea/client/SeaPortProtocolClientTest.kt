@@ -25,18 +25,17 @@ internal class SeaPortProtocolClientTest {
     @Test
     fun `should get all orders in 10 pages`() = runBlocking {
         val orders = mutableListOf<SeaportOrder>()
-        var next: String? = null
-        for (i in 1..1) {
+        var cursor: String? = null
+        for (i in 1..10) {
             val request = OrdersRequest(
                 limit = 50,
-                next = next,
-                previous = null
+                cursor = cursor
             )
             val result = client.getListOrders(request).ensureSuccess()
             orders.addAll(result.orders)
-            next = result.next
+            cursor = result.next
         }
-        assertEquals(orders.size, 50)
-        assertEquals(orders.map { it.orderHash }.toSet().size, 50)
+        assertEquals(orders.size, 500)
+        assertEquals(orders.map { it.orderHash }.toSet().size, 500)
     }
 }

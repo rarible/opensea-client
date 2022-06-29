@@ -19,8 +19,7 @@ class SeaportProtocolClientImpl(
         val uri = uriBuilderFactory.builder().run {
             path("/v2/orders/${network.value}/seaport/listings")
             request.limit?.let { queryParam("limit", it) }
-            request.next?.let { queryParam("next", it) }
-            request.previous?.let { queryParam("previous", it) }
+            request.cursor?.let { queryParam("cursor", it) }
             build()
         }
         return getOpenSeaResult(uri)
