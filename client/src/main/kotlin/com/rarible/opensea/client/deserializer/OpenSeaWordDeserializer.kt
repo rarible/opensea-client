@@ -15,7 +15,7 @@ class OpenSeaWordDeserializer : StdScalarDeserializer<Word>(Word::class.java) {
             val fixedString = when (string.length) {
                 62 -> string + "00"
                 63 -> string + "0"
-                40 -> string + "0000000000000000000000"
+                40 -> string + "000000000000000000000000"
                 else -> string
             }
             if (fixedString.isNotBlank()) Word.apply(fixedString) else null
