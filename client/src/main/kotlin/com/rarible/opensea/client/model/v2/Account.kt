@@ -1,7 +1,6 @@
 package com.rarible.opensea.client.model.v2
 
-import scalether.domain.Address
-
 data class Account(
-    val address: Address
+    // Can be as strange string like "HDMHzmPWCLUPGA6jiqCSeMYqTY6n99uwTJz8KLeiKRhR"
+    val address: String
 )
