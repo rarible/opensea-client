@@ -5,9 +5,11 @@ import com.rarible.opensea.client.model.v2.OrdersRequest
 import com.rarible.opensea.client.model.v2.SeaportOrder
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import java.net.URI
 
+@Disabled
 internal class SeaPortProtocolClientTest {
     private val client = SeaportProtocolClientImpl(
         endpoint = URI.create("https://api.opensea.io"),

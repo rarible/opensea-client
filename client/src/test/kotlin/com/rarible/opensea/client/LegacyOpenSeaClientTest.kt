@@ -1,6 +1,5 @@
 package com.rarible.opensea.client
 
-import com.rarible.opensea.client.agent.SimpleUserAgentProviderImpl
 import com.rarible.opensea.client.agent.UserAgentProvider
 import com.rarible.opensea.client.model.v1.OpenSeaOrder
 import com.rarible.opensea.client.model.v1.OrderSide
