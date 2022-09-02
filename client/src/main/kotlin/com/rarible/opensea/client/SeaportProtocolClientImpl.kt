@@ -22,17 +22,12 @@ class SeaportProtocolClientImpl(
             path("/v2/orders/${network.value}/seaport/listings")
             request.limit?.let { queryParam("limit", it) }
             request.cursor?.let { queryParam("cursor", it) }
-            build()
-        }
-        return getOpenSeaResult(uri)
-    }
-
-    override suspend fun getListOrders(contract: Address, tokenId: BigInteger, cursor: String?): OpenSeaResult<SeaportOrders> {
-        val uri = uriBuilderFactory.builder().run {
-            path("/v2/orders/${network.value}/seaport/listings")
-            queryParam("asset_contract_address", contract.toString())
-            queryParam("token_ids", tokenId.toString())
-            cursor?.let { queryParam("cursor", it) }
+            request.address?.let { queryParam("asset_contract_address", it.toString()) }
+            request.tokenIds?.let {
+                it.forEach { tokenId ->
+                    queryParam("token_ids", tokenId.toString())
+                }
+            }
             build()
         }
         return getOpenSeaResult(uri)
