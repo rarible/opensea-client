@@ -7,6 +7,8 @@ import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
+import scalether.domain.Address
+import java.math.BigInteger
 import java.net.URI
 
 @Disabled
@@ -40,4 +42,22 @@ internal class SeaPortProtocolClientTest {
         assertEquals(orders.size, 500)
         assertEquals(orders.map { it.orderHash }.toSet().size, 500)
     }
+
+    @Test
+    fun `should get orders by item`() = runBlocking {
+        val orders = mutableListOf<SeaportOrder>()
+        var cursor: String? = null
+        for (i in 1..2) {
+            val result = client.getListOrders(
+                Address.apply("0x7deb7bce4d360ebe68278dee6054b882aa62d19c"),
+                BigInteger("8"),
+                cursor
+            ).ensureSuccess()
+            orders.addAll(result.orders)
+            cursor = result.next
+        }
+        assertEquals(orders.size, 100)
+    }
+
+
 }
