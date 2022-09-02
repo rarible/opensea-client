@@ -4,6 +4,8 @@ import com.rarible.opensea.client.agent.UserAgentProvider
 import com.rarible.opensea.client.model.OpenSeaResult
 import com.rarible.opensea.client.model.v2.OrdersRequest
 import com.rarible.opensea.client.model.v2.SeaportOrders
+import scalether.domain.Address
+import java.math.BigInteger
 import java.net.URI
 
 class SeaportProtocolClientImpl(
@@ -20,6 +22,12 @@ class SeaportProtocolClientImpl(
             path("/v2/orders/${network.value}/seaport/listings")
             request.limit?.let { queryParam("limit", it) }
             request.cursor?.let { queryParam("cursor", it) }
+            request.address?.let { queryParam("asset_contract_address", it.toString()) }
+            request.tokenIds?.let {
+                it.forEach { tokenId ->
+                    queryParam("token_ids", tokenId.toString())
+                }
+            }
             build()
         }
         return getOpenSeaResult(uri)
