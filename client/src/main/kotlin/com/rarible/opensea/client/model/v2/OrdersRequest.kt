@@ -9,7 +9,7 @@ data class OrdersRequest(
     // A cursor to be supplied as a query param to retrieve the next page
     val cursor: String?,
 
-    val address: Address? = null,
+    val token: Address? = null,
 
     val tokenIds: List<BigInteger>? = null
 )
