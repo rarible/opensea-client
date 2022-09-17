@@ -2,6 +2,7 @@ package com.rarible.opensea.client.model.v2
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.rarible.opensea.client.deserializer.OpenSeaWordDeserializer
+import com.rarible.opensea.client.deserializer.SaltDeserializer
 import io.daonomic.rpc.domain.Word
 import scalether.domain.Address
 import java.math.BigInteger
@@ -24,6 +25,7 @@ data class OrderParameters(
     @JsonDeserialize(using = OpenSeaWordDeserializer::class)
     val zoneHash: Word,
 
+    @JsonDeserialize(using = SaltDeserializer::class)
     val salt: BigInteger,
 
     @JsonDeserialize(using = OpenSeaWordDeserializer::class)
