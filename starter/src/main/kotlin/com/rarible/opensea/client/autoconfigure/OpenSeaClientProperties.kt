@@ -28,7 +28,7 @@ data class LegacyOpenSeaClientProperties(
 @ConstructorBinding
 @ConfigurationProperties(RARIBLE_SEA_PORT_PROTOCOL)
 data class SeaPortProtocolClientProperties(
-    val network: Network,
+    val network: Network = Network.ETHEREUM,
     override val proxy: URI? = null,
     override val apiKey: String? = null,
     override val changeUserAgent: Boolean = true,
