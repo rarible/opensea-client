@@ -1,5 +1,6 @@
 package com.rarible.opensea.client.autoconfigure
 
+import com.rarible.opensea.client.Network
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding
 import java.net.URI
@@ -8,8 +9,6 @@ internal const val RARIBLE_OPEN_SEA = "rarible.opensea"
 internal const val RARIBLE_SEA_PORT_PROTOCOL = "rarible.seaport"
 
 interface OpenSeaClientProperties {
-    val testnet: Boolean
-    val endpoint: URI?
     val proxy: URI?
     val apiKey: String?
     val changeUserAgent: Boolean
@@ -19,8 +18,7 @@ interface OpenSeaClientProperties {
 @ConstructorBinding
 @ConfigurationProperties(RARIBLE_OPEN_SEA)
 data class LegacyOpenSeaClientProperties(
-    override val testnet: Boolean = false,
-    override val endpoint: URI? = null,
+    val testnet: Boolean = false,
     override val proxy: URI? = null,
     override val apiKey: String? = null,
     override val changeUserAgent: Boolean = true,
@@ -30,8 +28,7 @@ data class LegacyOpenSeaClientProperties(
 @ConstructorBinding
 @ConfigurationProperties(RARIBLE_SEA_PORT_PROTOCOL)
 data class SeaPortProtocolClientProperties(
-    override val testnet: Boolean = false,
-    override val endpoint: URI? = null,
+    val network: Network,
     override val proxy: URI? = null,
     override val apiKey: String? = null,
     override val changeUserAgent: Boolean = true,

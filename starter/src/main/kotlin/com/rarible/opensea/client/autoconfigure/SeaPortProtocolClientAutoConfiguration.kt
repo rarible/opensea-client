@@ -1,5 +1,6 @@
 package com.rarible.opensea.client.autoconfigure
 
+import com.rarible.opensea.client.Network
 import com.rarible.opensea.client.SeaportProtocolClient
 import com.rarible.opensea.client.SeaportProtocolClientImpl
 import com.rarible.opensea.client.agent.UserAgentProvider
@@ -16,9 +17,13 @@ class SeaPortProtocolClientAutoConfiguration(
     @Bean
     @ConditionalOnMissingBean(SeaportProtocolClient::class)
     fun seaPortProtocolClient(): SeaportProtocolClientImpl {
+        val endpoint = when (properties.network) {
+            Network.ETHEREUM, Network.POLYGON -> SEA_PORT_ENDPOINT
+            Network.GOERLI, Network.MUMBAI -> TESTNET_SEA_PORT_ENDPOINT
+        }
         return SeaportProtocolClientImpl(
-            endpoint = properties.endpoint ?: if (properties.testnet) TESTNET_SEA_PORT_ENDPOINT else SEA_PORT_ENDPOINT,
-            network = if (properties.testnet) SeaportProtocolClient.Network.RINKEBY else SeaportProtocolClient.Network.ETHEREUM,
+            endpoint = endpoint,
+            network = properties.network,
             apiKey = properties.apiKey,
             userAgentProvider = if (properties.changeUserAgent) userAgentProvider else null,
             proxy = properties.proxy,

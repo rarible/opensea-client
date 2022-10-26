@@ -17,7 +17,7 @@ class LegacyOpenSeaClientAutoConfiguration(
     @ConditionalOnMissingBean(OpenSeaClient::class)
     fun legacyOpenSeaClient(): OpenSeaClient {
         return OpenSeaClientImpl(
-            endpoint = properties.endpoint ?: if (properties.testnet) TESTNET_OPEN_SEA_ENDPOINT else OPEN_SEA_ENDPOINT,
+            endpoint = if (properties.testnet) TESTNET_OPEN_SEA_ENDPOINT else OPEN_SEA_ENDPOINT,
             apiKey = properties.apiKey,
             userAgentProvider = if (properties.changeUserAgent) userAgentProvider else null,
             proxy = properties.proxy,

@@ -4,13 +4,11 @@ import com.rarible.opensea.client.agent.UserAgentProvider
 import com.rarible.opensea.client.model.OpenSeaResult
 import com.rarible.opensea.client.model.v2.OrdersRequest
 import com.rarible.opensea.client.model.v2.SeaportOrders
-import scalether.domain.Address
-import java.math.BigInteger
 import java.net.URI
 
 class SeaportProtocolClientImpl(
     endpoint: URI,
-    private val network: SeaportProtocolClient.Network,
+    private val network: Network,
     apiKey: String?,
     userAgentProvider: UserAgentProvider?,
     proxy: URI?,
