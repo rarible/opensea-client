@@ -1,12 +1,18 @@
 package com.rarible.opensea.client.autoconfigure
 
+import com.rarible.opensea.client.OpenSeaClient
 import com.rarible.opensea.client.SeaportProtocolClient
+import com.rarible.opensea.client.model.v1.Asset
+import com.rarible.opensea.client.model.v1.AssetsRequest
 import com.rarible.opensea.client.model.v2.OrdersRequest
 import com.rarible.opensea.client.model.v2.SeaportOrder
 import kotlinx.coroutines.runBlocking
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.SpringBootConfiguration
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -24,9 +30,13 @@ class OpenSeaClientAutoConfigurationTest {
     @Autowired
     private lateinit var seaPortProtocolClient: SeaportProtocolClient
 
+    @Autowired
+    private lateinit var openSeaClient: OpenSeaClient
+
     @Test
     fun `test default consumer initialized`() {
-        assertNotEquals(seaPortProtocolClient, null)
+        assertThat(seaPortProtocolClient).isNotNull
+        assertThat(openSeaClient).isNotNull
     }
 
     @Test
@@ -65,5 +75,30 @@ class OpenSeaClientAutoConfigurationTest {
             cursor = result.next
         }
         assertEquals(orders.size, 37)
+    }
+
+    @Test
+    @Disabled
+    fun `get assets`() = runBlocking {
+        val assets = mutableSetOf<Asset>()
+        var cursor: String? = null
+        do {
+            val request = AssetsRequest(
+                contracts = listOf(Address.apply("0x60e4d786628fea6478f785a6d7e704777c86a7c6")),
+                tokenIds = emptyList(),
+                limit = 50,
+                cursor = cursor
+            )
+            val result = openSeaClient.getAssets(request).ensureSuccess()
+            logger.info("GET ${result.assets.size} assets")
+            assets.addAll(result.assets)
+            cursor = result.next
+        } while (cursor != null && result.assets.size >= 50)
+
+        logger.info("Fount ${assets.size} assets")
+    }
+
+    private companion object {
+        val logger: Logger = LoggerFactory.getLogger(OpenSeaClientAutoConfigurationTest::class.java)
     }
 }

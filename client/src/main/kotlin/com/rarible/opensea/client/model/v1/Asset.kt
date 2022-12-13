@@ -8,5 +8,7 @@ data class Asset(
     @JsonProperty("token_id")
     val tokenId: BigInteger,
     @JsonProperty("asset_contract")
-    val assetContract: AssetContract
+    val assetContract: AssetContract,
+    @JsonProperty("supports_wyvern")
+    val supportsWyvern: Boolean
 )

@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.rarible.opensea.client.agent.UserAgentProvider
 import com.rarible.opensea.client.model.OpenSeaError
 import com.rarible.opensea.client.model.OpenSeaErrorCode
@@ -16,8 +16,6 @@ import io.netty.channel.epoll.EpollChannelOption
 import io.netty.handler.timeout.ReadTimeoutHandler
 import io.netty.handler.timeout.WriteTimeoutHandler
 import kotlinx.coroutines.reactive.awaitFirstOrNull
-import kotlinx.coroutines.reactive.awaitSingle
-import kotlinx.coroutines.reactor.awaitSingle
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -30,7 +28,6 @@ import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.awaitExchange
 import org.springframework.web.reactive.function.client.bodyToMono
 import org.springframework.web.util.DefaultUriBuilderFactory
-import reactor.core.publisher.Mono
 import reactor.netty.http.client.HttpClient
 import reactor.netty.resources.ConnectionProvider
 import reactor.netty.transport.ProxyProvider
@@ -49,7 +46,7 @@ abstract class AbstractOpenSeaClient(
     protected val logger = LoggerFactory.getLogger(javaClass)
 
     protected val mapper = ObjectMapper().apply {
-        registerModule(KotlinModule())
+        registerKotlinModule()
         registerModule(JavaTimeModule())
         configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         setSerializationInclusion(JsonInclude.Include.NON_NULL)
