@@ -49,6 +49,7 @@ class OpenSeaClientImpl(
             request.includeOrders?.let { queryParam("include_orders", it) }
             request.sortDirection?.let { queryParam("order_direction", it.value) }
             request.limit?.let { queryParam("limit", it) }
+            request.cursor?.let { queryParam("cursor", it) }
             build()
         }
         return getOpenSeaResult(uri)

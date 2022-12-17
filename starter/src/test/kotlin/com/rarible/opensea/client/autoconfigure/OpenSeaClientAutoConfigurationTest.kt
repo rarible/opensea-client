@@ -90,9 +90,9 @@ class OpenSeaClientAutoConfigurationTest {
                 cursor = cursor
             )
             val result = openSeaClient.getAssets(request).ensureSuccess()
-            logger.info("GET ${result.assets.size} assets")
             assets.addAll(result.assets)
             cursor = result.next
+            logger.info("GET ${result.assets.size} assets, total=${assets.size}")
         } while (cursor != null && result.assets.size >= 50)
 
         logger.info("Fount ${assets.size} assets")
