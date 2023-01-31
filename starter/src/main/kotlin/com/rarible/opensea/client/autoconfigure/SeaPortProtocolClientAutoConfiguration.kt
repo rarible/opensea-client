@@ -30,7 +30,8 @@ class SeaPortProtocolClientAutoConfiguration(
             apiKey = properties.apiKey,
             userAgentProvider = if (properties.changeUserAgent) userAgentProvider else null,
             proxy = properties.proxy,
-            logRawJson = properties.logRawJson
+            logRawJson = properties.logRawJson,
+            compress = properties.compress
         )
     }
 

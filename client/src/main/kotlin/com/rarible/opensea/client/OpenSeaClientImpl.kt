@@ -13,8 +13,9 @@ class OpenSeaClientImpl(
     apiKey: String?,
     userAgentProvider: UserAgentProvider?,
     proxy: URI?,
-    logRawJson: Boolean = false
-) : OpenSeaClient, AbstractOpenSeaClient(endpoint, apiKey, userAgentProvider, proxy, logRawJson) {
+    logRawJson: Boolean = false,
+    compress: Boolean,
+) : OpenSeaClient, AbstractOpenSeaClient(endpoint, apiKey, userAgentProvider, proxy, logRawJson, compress) {
 
     @Deprecated("Should use SeaPortProtocolClientImpl to get orders")
     override suspend fun getOrders(request: OrdersRequest): OpenSeaResult<OpenSeaOrderItems> {

@@ -13,6 +13,7 @@ interface OpenSeaClientProperties {
     val apiKey: String?
     val changeUserAgent: Boolean
     val logRawJson: Boolean
+    val compress: Boolean
 }
 
 @ConstructorBinding
@@ -22,7 +23,8 @@ data class LegacyOpenSeaClientProperties(
     override val proxy: URI? = null,
     override val apiKey: String? = null,
     override val changeUserAgent: Boolean = true,
-    override val logRawJson: Boolean = false
+    override val logRawJson: Boolean = false,
+    override val compress: Boolean = true,
 ) : OpenSeaClientProperties
 
 @ConstructorBinding
@@ -32,5 +34,6 @@ data class SeaPortProtocolClientProperties(
     override val proxy: URI? = null,
     override val apiKey: String? = null,
     override val changeUserAgent: Boolean = true,
-    override val logRawJson: Boolean = false
+    override val logRawJson: Boolean = false,
+    override val compress: Boolean = true,
 ) : OpenSeaClientProperties

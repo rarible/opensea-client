@@ -41,7 +41,8 @@ abstract class AbstractOpenSeaClient(
     protected val apiKey: String?,
     protected val userAgentProvider: UserAgentProvider?,
     proxy: URI?,
-    protected val logRawJson: Boolean = false
+    protected val logRawJson: Boolean = false,
+    private val compress: Boolean,
 ) {
     protected val logger = LoggerFactory.getLogger(javaClass)
 
@@ -148,6 +149,7 @@ abstract class AbstractOpenSeaClient(
                 connection.addHandlerLast(WriteTimeoutHandler(DEFAULT_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS))
             }
             .responseTimeout(DEFAULT_TIMEOUT)
+            .compress(compress)
 
         val finalClient = if (proxy != null) {
             client

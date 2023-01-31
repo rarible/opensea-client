@@ -12,8 +12,9 @@ class SeaportProtocolClientImpl(
     apiKey: String?,
     userAgentProvider: UserAgentProvider?,
     proxy: URI?,
-    logRawJson: Boolean = false
-) : SeaportProtocolClient, AbstractOpenSeaClient(endpoint, apiKey, userAgentProvider, proxy, logRawJson) {
+    logRawJson: Boolean = false,
+    compress: Boolean,
+) : SeaportProtocolClient, AbstractOpenSeaClient(endpoint, apiKey, userAgentProvider, proxy, logRawJson, compress) {
 
     override suspend fun getListOrders(request: OrdersRequest): OpenSeaResult<SeaportOrders> {
         val uri = uriBuilderFactory.builder().run {
