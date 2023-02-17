@@ -84,7 +84,7 @@ class OpenSeaClientAutoConfigurationTest {
         var cursor: String? = null
         do {
             val request = AssetsRequest(
-                contracts = listOf(Address.apply("0x60e4d786628fea6478f785a6d7e704777c86a7c6")),
+                contracts = listOf(Address.apply("0x10f1d490b98b65cf5ad8babab840a979a49c9b84")),
                 tokenIds = emptyList(),
                 limit = 50,
                 cursor = cursor

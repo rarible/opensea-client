@@ -6,5 +6,5 @@ import scalether.domain.Address
 data class AssetContract(
     val address: Address,
     @JsonProperty("schema_name")
-    val schemaName: AssetSchema
+    val schemaName: AssetSchema?
 )
