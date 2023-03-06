@@ -1,9 +1,10 @@
 package com.rarible.opensea.client.deserializer
 
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 internal class SaltDeserializerTest {
+
     private val deserializer = SaltDeserializer()
 
     @Test

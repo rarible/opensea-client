@@ -1,6 +1,7 @@
 package com.rarible.opensea.client.model.v2
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.rarible.opensea.client.deserializer.OpenSeaCounterDeserializer
 import com.rarible.opensea.client.deserializer.OpenSeaWordDeserializer
 import com.rarible.opensea.client.deserializer.SaltDeserializer
 import io.daonomic.rpc.domain.Word
@@ -33,5 +34,6 @@ data class OrderParameters(
 
     val totalOriginalConsiderationItems: BigInteger,
 
+    @JsonDeserialize(using = OpenSeaCounterDeserializer::class)
     val counter: BigInteger
 )
