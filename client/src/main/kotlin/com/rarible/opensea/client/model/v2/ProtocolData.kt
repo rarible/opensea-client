@@ -4,5 +4,5 @@ import io.daonomic.rpc.domain.Binary
 
 data class ProtocolData(
     val parameters: OrderParameters,
-    val signature: Binary
+    val signature: Binary?
 )
