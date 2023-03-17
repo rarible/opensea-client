@@ -2,6 +2,8 @@ package com.rarible.opensea.client
 
 import com.rarible.opensea.client.agent.UserAgentProvider
 import com.rarible.opensea.client.model.OpenSeaResult
+import com.rarible.opensea.client.model.v2.FulfillListingRequest
+import com.rarible.opensea.client.model.v2.FulfillListingResponse
 import com.rarible.opensea.client.model.v2.OrdersRequest
 import com.rarible.opensea.client.model.v2.SeaportOrders
 import java.net.URI
@@ -30,5 +32,13 @@ class SeaportProtocolClientImpl(
             build()
         }
         return getOpenSeaResult(uri)
+    }
+
+    override suspend fun getFulfillListingInfo(request: FulfillListingRequest): OpenSeaResult<FulfillListingResponse> {
+        val uri = uriBuilderFactory.builder().run {
+            path("/v2/listings/fulfillment_data")
+            build()
+        }
+        return postOpenSeaResult(uri, request.toPayload())
     }
 }
