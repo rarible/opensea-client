@@ -19,9 +19,11 @@ import kotlinx.coroutines.reactive.awaitFirstOrNull
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.client.reactive.ClientHttpConnector
 import org.springframework.http.client.reactive.ReactorClientHttpConnector
 import org.springframework.util.unit.DataSize
+import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.client.ClientResponse
 import org.springframework.web.reactive.function.client.ExchangeStrategies
 import org.springframework.web.reactive.function.client.WebClient
@@ -94,13 +96,15 @@ abstract class AbstractOpenSeaClient(
             }
             .run {
                 if (!apiKey.isNullOrBlank()) {
-                    println(apiKey)
                     header("X-API-KEY", apiKey)
                 } else {
                     this
                 }
             }
-            .bodyValue(payload)
+            .run {
+                header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            }
+            .body(BodyInserters.fromValue(payload))
             .awaitExchange()
 
         return getResult(response)
