@@ -1,11 +1,14 @@
 package com.rarible.opensea.client.autoconfigure
 
+import com.rarible.opensea.client.Network
 import com.rarible.opensea.client.OpenSeaClient
 import com.rarible.opensea.client.SeaportProtocolClient
 import com.rarible.opensea.client.model.v1.Asset
 import com.rarible.opensea.client.model.v1.AssetsRequest
+import com.rarible.opensea.client.model.v2.FulfillListingRequest
 import com.rarible.opensea.client.model.v2.OrdersRequest
 import com.rarible.opensea.client.model.v2.SeaportOrder
+import io.daonomic.rpc.domain.Word
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.*
@@ -55,6 +58,19 @@ class OpenSeaClientAutoConfigurationTest {
         }
         assertEquals(orders.size, 50)
         assertEquals(orders.map { it.orderHash }.toSet().size, 50)
+    }
+
+    @Test
+    @Disabled
+    fun `get orders fulfill data`() = runBlocking<Unit> {
+        val request = FulfillListingRequest(
+            hash = Word.apply("0x2bfa3bfcad86f563cc609f2f0081aa2c06951ae764c8df52fd796942170815db"),
+            network = Network.GOERLI,
+            protocolAddress = Address.apply("0x00000000000001ad428e4906aE43D8F9852d0dD6"),
+            fulfiller = Address.apply("0xd5be662cf4d6d9722990ca2cdd16bf53ecb94325")
+        )
+        val result = seaPortProtocolClient.getFulfillListingInfo(request).ensureSuccess()
+        assertThat(result).isNotNull
     }
 
     @Test

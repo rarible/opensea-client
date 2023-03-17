@@ -62,7 +62,21 @@ abstract class AbstractOpenSeaClient(
     protected suspend  inline fun <reified T> getOpenSeaResult(uri: URI): OpenSeaResult<T> {
         val response = transport.get()
             .uri(uri)
-            .addHeader()
+            .run {
+                if (userAgentProvider != null) {
+                    header(HttpHeaders.USER_AGENT, userAgentProvider.get())
+                } else {
+                    this
+                }
+            }
+            .run {
+                if (!apiKey.isNullOrBlank()) {
+                    println(apiKey)
+                    header("X-API-KEY", apiKey)
+                } else {
+                    this
+                }
+            }
             .awaitExchange()
 
         return getResult(response)
@@ -71,8 +85,22 @@ abstract class AbstractOpenSeaClient(
     protected suspend  inline fun <reified T, P: Any> postOpenSeaResult(uri: URI, payload: P): OpenSeaResult<T> {
         val response = transport.post()
             .uri(uri)
+            .run {
+                if (userAgentProvider != null) {
+                    header(HttpHeaders.USER_AGENT, userAgentProvider.get())
+                } else {
+                    this
+                }
+            }
+            .run {
+                if (!apiKey.isNullOrBlank()) {
+                    println(apiKey)
+                    header("X-API-KEY", apiKey)
+                } else {
+                    this
+                }
+            }
             .bodyValue(payload)
-            .addHeader()
             .awaitExchange()
 
         return getResult(response)
@@ -158,22 +186,6 @@ abstract class AbstractOpenSeaClient(
             client
         }
         return ReactorClientHttpConnector(finalClient)
-    }
-
-    protected fun WebClient.RequestHeadersSpec<*>.addHeader(): WebClient.RequestHeadersSpec<*> {
-        return run {
-            if (userAgentProvider != null) {
-                header(HttpHeaders.USER_AGENT, userAgentProvider.get())
-            } else {
-                this
-            }
-        }.run {
-            if (apiKey != null && apiKey.isNotBlank()) {
-                header("X-API-KEY", apiKey)
-            } else {
-                this
-            }
-        }
     }
 
     protected companion object {

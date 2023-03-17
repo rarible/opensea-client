@@ -8,7 +8,7 @@ import scalether.domain.Address
 data class FulfillListingRequest(
     val hash: Word,
     val network: Network,
-    val protocolAddress: Word,
+    val protocolAddress: Address,
     val fulfiller: Address
 ) {
     internal fun toPayload(): Payload {
@@ -33,7 +33,7 @@ data class FulfillListingRequest(
         val hash: Word,
         val chain: String,
         @JsonProperty("protocol_address")
-        val protocolAddress: Word
+        val protocolAddress: Address
     )
 
     internal data class Fulfiller(
