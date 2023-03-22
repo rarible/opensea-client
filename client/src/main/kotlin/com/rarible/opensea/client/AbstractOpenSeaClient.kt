@@ -194,7 +194,7 @@ abstract class AbstractOpenSeaClient(
 
     protected companion object {
         val EMPTY_BODY: ByteArray = ByteArray(0)
-        val DEFAULT_MAX_BODY_SIZE = DataSize.ofMegabytes(10).toBytes().toInt()
+        val DEFAULT_MAX_BODY_SIZE = DataSize.ofMegabytes(20).toBytes().toInt()
         val DEFAULT_TIMEOUT: Duration = Duration.ofSeconds(60)
         val DEFAULT_TIMEOUT_MILLIS: Long = DEFAULT_TIMEOUT.toMillis()
     }
