@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 import java.time.Instant
 
 data class OpenseaEvent(
+    val eventId: String,
     val event: OpenseaEventType,
 
     @JsonTypeInfo(property = "event", use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY)
