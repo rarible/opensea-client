@@ -7,6 +7,7 @@ import java.time.Instant
 data class OpenseaEvent(
     val eventId: String,
     val event: OpenseaEventType,
+    val eventTimeMarks: EventTimeMarks? = null,
 
     @JsonTypeInfo(property = "event", use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY)
     @JsonSubTypes(

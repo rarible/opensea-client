@@ -22,7 +22,7 @@ class OpenseaConsumerFactory(
             group = group,
             concurrency = concurrency,
             batchSize = batchSize,
-            offsetResetStrategy = OffsetResetStrategy.EARLIEST,
+            offsetResetStrategy = OffsetResetStrategy.LATEST,
             valueClass = OpenseaEvent::class.java
         )
     }
