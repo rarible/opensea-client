@@ -32,9 +32,9 @@
     </distributionManagement>
 
     <properties>
-        <revision>2.1.17</revision>
+        <revision>2.1.18</revision>
 
-        <rarible.core.version>2.5.24</rarible.core.version>
+        <rarible.core.version>2.5.31</rarible.core.version>
         <rarible.ethereum.version>1.7.9</rarible.ethereum.version>
     </properties>
 
@@ -46,6 +46,11 @@
                 <version>${rarible.core.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.rarible.core</groupId>
+                <artifactId>rarible-core-kafka</artifactId>
+                <version>${rarible.core.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.rarible.ethereum</groupId>
@@ -110,5 +115,6 @@
     <modules>
         <module>client</module>
         <module>starter</module>
+        <module>subscriber</module>
     </modules>
 </project>
