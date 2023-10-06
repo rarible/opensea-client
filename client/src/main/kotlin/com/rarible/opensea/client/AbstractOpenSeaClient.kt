@@ -36,6 +36,7 @@ import reactor.netty.transport.ProxyProvider
 import java.net.URI
 import java.nio.charset.StandardCharsets
 import java.time.Duration
+import java.util.Random
 import java.util.concurrent.TimeUnit
 
 abstract class AbstractOpenSeaClient(
@@ -47,6 +48,7 @@ abstract class AbstractOpenSeaClient(
     private val compress: Boolean,
 ) {
     protected val logger = LoggerFactory.getLogger(javaClass)
+    protected val apiKeys = (apiKey ?: "").split(",").map { it.trim() }.filter { it.isNotEmpty() }
 
     protected val mapper = ObjectMapper().apply {
         registerKotlinModule()
@@ -61,7 +63,7 @@ abstract class AbstractOpenSeaClient(
         encodingMode = DefaultUriBuilderFactory.EncodingMode.NONE
     }
 
-    protected suspend  inline fun <reified T> getOpenSeaResult(uri: URI): OpenSeaResult<T> {
+    protected suspend inline fun <reified T> getOpenSeaResult(uri: URI): OpenSeaResult<T> {
         val response = transport.get()
             .uri(uri)
             .run {
@@ -72,9 +74,9 @@ abstract class AbstractOpenSeaClient(
                 }
             }
             .run {
-                if (!apiKey.isNullOrBlank()) {
-                    println(apiKey)
-                    header("X-API-KEY", apiKey)
+                if (apiKeys.isNotEmpty()) {
+                    val randomApiKey = apiKeys[Random().nextInt(apiKeys.size)]
+                    header("X-API-KEY", randomApiKey)
                 } else {
                     this
                 }
@@ -84,7 +86,7 @@ abstract class AbstractOpenSeaClient(
         return getResult(response)
     }
 
-    protected suspend  inline fun <reified T, P: Any> postOpenSeaResult(uri: URI, payload: P): OpenSeaResult<T> {
+    protected suspend inline fun <reified T, P : Any> postOpenSeaResult(uri: URI, payload: P): OpenSeaResult<T> {
         val response = transport.post()
             .uri(uri)
             .run {
@@ -110,7 +112,7 @@ abstract class AbstractOpenSeaClient(
         return getResult(response)
     }
 
-    protected suspend  inline fun <reified T> getResult(response: ClientResponse): OpenSeaResult<T> {
+    protected suspend inline fun <reified T> getResult(response: ClientResponse): OpenSeaResult<T> {
         val httpCode = response.statusCode().value()
         val body = response.bodyToMono<ByteArray>().awaitFirstOrNull() ?: EMPTY_BODY
         return when (response.statusCode()) {
@@ -120,6 +122,7 @@ abstract class AbstractOpenSeaClient(
                 }
                 OperationResult.success(mapper.readValue(body))
             }
+
             HttpStatus.NOT_FOUND -> OperationResult.fail(getError(body, httpCode, OpenSeaErrorCode.ORDERS_NOT_FOUND))
             HttpStatus.BAD_REQUEST -> OperationResult.fail(getError(body, httpCode, OpenSeaErrorCode.BAD_REQUEST))
             HttpStatus.TOO_MANY_REQUESTS -> OperationResult.fail(
@@ -129,6 +132,7 @@ abstract class AbstractOpenSeaClient(
                     OpenSeaErrorCode.TOO_MANY_REQUESTS
                 )
             )
+
             HttpStatus.INTERNAL_SERVER_ERROR -> OperationResult.fail(
                 getError(
                     body,
@@ -136,6 +140,7 @@ abstract class AbstractOpenSeaClient(
                     OpenSeaErrorCode.SERVER_ERROR
                 )
             )
+
             else -> OperationResult.fail(getError(body, httpCode, OpenSeaErrorCode.UNKNOWN))
         }
     }
@@ -184,7 +189,8 @@ abstract class AbstractOpenSeaClient(
             client
                 .proxy { option ->
                     val userInfo = proxy.userInfo.split(":")
-                    option.type(ProxyProvider.Proxy.HTTP).host(proxy.host).username(userInfo[0]).password { userInfo[1] }.port(proxy.port)
+                    option.type(ProxyProvider.Proxy.HTTP).host(proxy.host).username(userInfo[0])
+                        .password { userInfo[1] }.port(proxy.port)
                 }
         } else {
             client
