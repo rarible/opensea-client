@@ -5,4 +5,5 @@ enum class Network(val value: String) {
     MUMBAI("mumbai"),
     ETHEREUM("ethereum"),
     POLYGON("matic"),
+    ARBITRUM("arbitrum"),
 }
