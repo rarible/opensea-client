@@ -20,7 +20,7 @@ class SeaPortProtocolClientAutoConfiguration(
     @ConditionalOnMissingBean(SeaportProtocolClient::class)
     fun seaPortProtocolClient(): SeaportProtocolClientImpl {
         val endpoint = when (properties.network) {
-            Network.ETHEREUM, Network.POLYGON, Network.ARBITRUM -> SEA_PORT_ENDPOINT
+            Network.ETHEREUM, Network.POLYGON, Network.ARBITRUM, Network.BASE -> SEA_PORT_ENDPOINT
             Network.GOERLI, Network.MUMBAI, Network.ARBITRUM_SEPOLIA -> TESTNET_SEA_PORT_ENDPOINT
         }
         logger.info("Start Seaport client [endpoint=$endpoint], [network=${properties.network}]")

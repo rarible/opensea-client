@@ -7,4 +7,5 @@ enum class Network(val value: String) {
     POLYGON("matic"),
     ARBITRUM_SEPOLIA("arbitrum_sepolia"),
     ARBITRUM("arbitrum"),
+    BASE("base"),
 }
