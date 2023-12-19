@@ -47,7 +47,7 @@ class SeaportProtocolClientImpl(
 
     override suspend fun getNftByContract(request: NftsByContractRequest): OpenSeaResult<NftsResponse> {
         val uri = uriBuilderFactory.builder().run {
-            path("/api/v2/chain/${request.network.value}/contract/${request.contract.prefixed()}/nfts")
+            path("/api/v2/chain/${(request.network ?: network).value}/contract/${request.contract.prefixed()}/nfts")
             queryParam("limit", max(request.limit, 200))
             request.next?.let { queryParam("next", it) }
             build()
