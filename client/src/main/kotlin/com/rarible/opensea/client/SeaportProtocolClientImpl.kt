@@ -4,9 +4,12 @@ import com.rarible.opensea.client.agent.UserAgentProvider
 import com.rarible.opensea.client.model.OpenSeaResult
 import com.rarible.opensea.client.model.v2.FulfillListingRequest
 import com.rarible.opensea.client.model.v2.FulfillListingResponse
+import com.rarible.opensea.client.model.v2.NftsByContractRequest
+import com.rarible.opensea.client.model.v2.NftsResponse
 import com.rarible.opensea.client.model.v2.OrdersRequest
 import com.rarible.opensea.client.model.v2.SeaportOrders
 import java.net.URI
+import kotlin.math.max
 
 class SeaportProtocolClientImpl(
     endpoint: URI,
@@ -40,5 +43,15 @@ class SeaportProtocolClientImpl(
             build()
         }
         return postOpenSeaResult(uri, request.toPayload())
+    }
+
+    override suspend fun getNftByContract(request: NftsByContractRequest): OpenSeaResult<NftsResponse> {
+        val uri = uriBuilderFactory.builder().run {
+            path("/api/v2/chain/${request.network.value}/contract/${request.contract.prefixed()}/nfts")
+            queryParam("limit", max(request.limit, 200))
+            request.next?.let { queryParam("next", it) }
+            build()
+        }
+        return getOpenSeaResult(uri)
     }
 }

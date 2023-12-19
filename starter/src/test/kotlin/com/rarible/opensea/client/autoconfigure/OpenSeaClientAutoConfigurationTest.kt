@@ -5,7 +5,9 @@ import com.rarible.opensea.client.OpenSeaClient
 import com.rarible.opensea.client.SeaportProtocolClient
 import com.rarible.opensea.client.model.v1.Asset
 import com.rarible.opensea.client.model.v1.AssetsRequest
+import com.rarible.opensea.client.model.v1.SimpleNft
 import com.rarible.opensea.client.model.v2.FulfillListingRequest
+import com.rarible.opensea.client.model.v2.NftsByContractRequest
 import com.rarible.opensea.client.model.v2.OrdersRequest
 import com.rarible.opensea.client.model.v2.SeaportOrder
 import io.daonomic.rpc.domain.Word
@@ -112,6 +114,25 @@ class OpenSeaClientAutoConfigurationTest {
         } while (cursor != null && result.assets.size >= 50)
 
         logger.info("Fount ${assets.size} assets")
+    }
+
+    @Test
+    fun `get nfts by contract`() = runBlocking {
+        val nfts = mutableSetOf<SimpleNft>()
+        var next: String? = null
+        do {
+            val request = NftsByContractRequest(
+                contract = Address.apply("0x3f705da685dbae723850951c9081f545052d1ad2"),
+                network = Network.ETHEREUM,
+                limit = 50,
+                next = next
+            )
+            val result = seaPortProtocolClient.getNftByContract(request).ensureSuccess()
+            next = result.next
+            nfts.addAll(result.nfts)
+        } while (next != null && result.nfts.size >= 50)
+
+        logger.info("Fount ${nfts.size} assets")
     }
 
     private companion object {
