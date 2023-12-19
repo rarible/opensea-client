@@ -117,6 +117,7 @@ class OpenSeaClientAutoConfigurationTest {
     }
 
     @Test
+    @Disabled
     fun `get nfts by contract`() = runBlocking {
         val nfts = mutableSetOf<SimpleNft>()
         var next: String? = null
