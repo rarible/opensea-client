@@ -2,16 +2,18 @@ package com.rarible.opensea.client.model.v1
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
+import scalether.domain.Address
+import java.math.BigInteger
 import java.time.Instant
 
 data class SimpleNft(
-    val identifier: String,
-    val collection: String,
-    val contract: String,
+    val identifier: BigInteger,
+    val collection: String?,
+    val contract: Address,
     @JsonProperty("token_standard")
     val tokenStandard: String,
-    val name: String,
-    val description: String,
+    val name: String?,
+    val description: String?,
     @JsonProperty("image_url")
     val imageUrl: String?,
     @JsonProperty("metadata_url")
