@@ -11,15 +11,16 @@ data class OpenseaEvent(
 
     @JsonTypeInfo(property = "event", use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY)
     @JsonSubTypes(
-        JsonSubTypes.Type(name = "item_cancelled", value = OpenseaItemCancelled::class),
+        JsonSubTypes.Type(name = "item_cancelled", value = OpenseaOrderInfoPayload::class),
+        JsonSubTypes.Type(name = "order_invalidated", value = OpenseaOrderInfoPayload::class),
+        JsonSubTypes.Type(name = "order_revalidated", value = OpenseaOrderInfoPayload::class),
     )
     val payload: OpenseaEventPayload
 )
 
 sealed class OpenseaEventPayload
 
-data class OpenseaItemCancelled(
+data class OpenseaOrderInfoPayload(
     val orderHash: String,
     val eventTimestamp: Instant,
-    val maker: String?,
 ): OpenseaEventPayload()
