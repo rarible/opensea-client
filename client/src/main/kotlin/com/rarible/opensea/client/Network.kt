@@ -1,6 +1,7 @@
 package com.rarible.opensea.client
 
 enum class Network(val value: String) {
+    SEPOLIA("sepolia"),
     GOERLI("goerli"),
     MUMBAI("mumbai"),
     ETHEREUM("ethereum"),
