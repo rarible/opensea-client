@@ -32,7 +32,7 @@
     </distributionManagement>
 
     <properties>
-        <revision>2.1.30</revision>
+        <revision>2.1.31</revision>
 
         <rarible.core.version>2.7.1</rarible.core.version>
         <rarible.ethereum.version>1.7.34</rarible.ethereum.version>
