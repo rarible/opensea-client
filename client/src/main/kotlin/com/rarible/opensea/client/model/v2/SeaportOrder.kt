@@ -13,10 +13,6 @@ data class SeaportOrder(
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss[.SSSSSS][z]", timezone = "UTC")
     val createdAt: Instant,
 
-    @JsonProperty("event_timestamp")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss[.SSSSSS][z]", timezone = "UTC")
-    val eventDate: Instant,
-
     @JsonProperty("closing_date")
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss[.SSSSSS][z]", timezone = "UTC")
     val closingDate: Instant?,
